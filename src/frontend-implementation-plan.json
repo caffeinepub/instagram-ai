@@ -1,0 +1,356 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "instagram ai — Instagram-like social app (frontend)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Internet Identity sign-in screen and auth-gated app shell with logout that clears cached user UI state.",
+      "acceptanceCriteria": [
+        "Unauthenticated users see a clear sign-in screen with an Internet Identity login button.",
+        "After successful login, the user is routed to the main app experience without requiring a page reload.",
+        "Signing out returns the user to the sign-in screen and clears any cached user-specific UI state."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the root app shell that gates all app content behind Internet Identity authentication, wires routing/navigation, and ensures logout clears React Query cache (use the selected authorization component’s frontend guidance for auth gating + cache clearing). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/SignInPage.tsx",
+          "operation": "create",
+          "description": "Create a dedicated sign-in screen with an Internet Identity login button and branding (use frontend/public/assets/generated/instagram-ai-wordmark.dim_1200x300.png and frontend/public/assets/generated/instagram-ai-logo.dim_512x512.png). Use the selected authorization component’s recommended login/logout patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AuthGate.tsx",
+          "operation": "create",
+          "description": "Create an auth gate wrapper that shows SignInPage when unauthenticated, otherwise renders the authenticated app layout; handle \"initializing\" state from useInternetIdentity to avoid UI flashes. Use the selected authorization component’s guidance for preventing profile setup modal flash patterns as applicable. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProfileSetupDialog.tsx",
+          "operation": "create",
+          "description": "Create a first-login profile setup dialog that prompts for display name (and optional bio) and calls backend createOrUpdateProfile; show only after authentication and after an attempted profile fetch indicates missing/invalid profile. Prefer shadcn-ui Dialog/Input/Button to match the design system. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch the current user’s profile using useActor + the authenticated principal (actor.getProfile(identity principal)), returning loading/error states that AuthGate can use to decide whether to show ProfileSetupDialog. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create the authenticated layout shell (top bar or bottom nav) used across Feed/Search/Profile, including a logout control that calls useInternetIdentity.clear() and clears React Query cache; include wordmark/logo in navigation using generated assets. Prefer shadcn-ui layout primitives where helpful. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the app continues to mount QueryClientProvider + InternetIdentityProvider and renders the new App.tsx shell; keep logout behavior compatible with query cache clearing from within the authenticated layout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Main feed UI with scrollable post list, React Query data loading, and loading/empty/error states with caching.",
+      "acceptanceCriteria": [
+        "Feed renders a list of posts returned by the backend in reverse-chronological order (newest first).",
+        "Each post card shows author, image, caption, like count, and a way to open/view comments.",
+        "Loading state is shown while fetching; empty state is shown when there are no posts; error state is shown on failures.",
+        "React Query caching is used so returning to the feed does not always refetch immediately."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "create",
+          "description": "Create the feed page with a scrollable list of PostCard components and explicit loading/empty/error UI; use React Query caching (staleTime/keepPreviousData where appropriate). In empty state, display frontend/public/assets/generated/empty-feed-illustration.dim_1200x800.png. Verify the selected shadcn-ui component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useFeed.ts",
+          "operation": "create",
+          "description": "Add a React Query hook that loads feed posts and sorts by timestamp descending. Use available backend capabilities (e.g., searchProfiles + getPostsByUser aggregation) to build a feed dataset while preserving caching behavior. Verify the selected authorization component’s guidance for handling authorization traps and unauthenticated callers before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable post card that renders author display name (resolved via profile lookup), image (via ExternalBlob.getDirectURL), caption, timestamp formatting, like button/count, and a comments preview/open action. Use shadcn-ui Card/Button components as appropriate. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/LoadingStates.tsx",
+          "operation": "create",
+          "description": "Add small shared UI components for loading/empty/error states used by Feed/Search/Profile to ensure consistent UX and English user-facing text. Prefer shadcn-ui Skeleton/Alert patterns if available. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the FeedPage into the authenticated router/nav so it is reachable immediately after login and is part of the gated app shell."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "New post creation flow with image selection, caption input, validation, upload progress, and feed refresh on success.",
+      "acceptanceCriteria": [
+        "User can open a \"New Post\" flow, select an image, add a caption, and submit.",
+        "Client prevents submission when no image is selected; caption is optional (or clearly validated if required).",
+        "On success, the user sees the new post in the feed without a full page refresh.",
+        "If upload fails, the user sees a clear error message and can retry."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NewPostDialog.tsx",
+          "operation": "create",
+          "description": "Create a \"New Post\" modal/dialog with file picker, image preview, caption input, client-side validation (require image; caption optional), and submit/cancel actions. Use the selected blob-storage component’s ExternalBlob.fromBytes + withUploadProgress for upload progress UI, and shadcn-ui Dialog/Input/Button/Progress. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCreatePost.ts",
+          "operation": "create",
+          "description": "Add a React Query mutation hook that calls actor.createPost(caption, imageExternalBlob) and on success invalidates/refetches the feed query so the new post appears without full refresh; handle and surface errors in English. Verify the blob-storage component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Add a visible entry point to open the NewPostDialog (e.g., nav action) and ensure successful post creation updates the feed via query invalidation; ensure failures show a retryable error message."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add a primary navigation action to open the New Post flow from anywhere within authenticated screens; keep it responsive for mobile/desktop. Verify shadcn-ui usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Like/unlike and comments (view/add) interactions with optimistic UI and backend persistence.",
+      "acceptanceCriteria": [
+        "Tapping like toggles like/unlike for the current user and updates the like count.",
+        "Comments view shows a list of comments for a post and allows adding a new comment.",
+        "After adding a comment, the new comment appears in the list without a full page reload.",
+        "Backend prevents empty comments (or applies clear validation rules) and enforces authenticated callers."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useLikePost.ts",
+          "operation": "create",
+          "description": "Add a React Query mutation for liking/unliking posts using actor.likePost(postId), with optimistic UI updates to the cached feed/post data and robust rollback on error; treat backend like behavior as a toggle if that is how it is implemented. Verify the authorization component’s guidance for handling authorization failures before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostCommentsDialog.tsx",
+          "operation": "create",
+          "description": "Create a comments dialog/sheet that shows comment list (author, timestamp, text) and an input to add a comment; validate non-empty text client-side and call actor.addComment(postId, text), then refresh cached post/comments without full reload. Prefer shadcn-ui Dialog/Sheet/Input/Button components. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/usePost.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch a single post (actor.getPost) for the comments view and to support targeted refresh after mutations; ensure caching and error states are handled in English."
+        },
+        {
+          "path": "frontend/src/components/PostCard.tsx",
+          "operation": "modify",
+          "description": "Wire like button to useLikePost with immediate feedback and like count updates; add a \"View comments\" action that opens PostCommentsDialog and shows a small preview (e.g., first 1–2 comments) when available."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Ensure comment dialog interactions update the correct cached queries (feed list and/or per-post query) so new comments appear without a full page refresh."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "User profile pages with display name, bio, optional avatar placeholder, counts, user posts grid/list, and edit flow for own profile.",
+      "acceptanceCriteria": [
+        "User can view their own profile and other users’ profiles.",
+        "Own profile includes an edit flow for display name and bio (and avatar if implemented).",
+        "Profile shows post count and follower/following counts derived from backend state.",
+        "Profile shows the user’s posts in a grid/list similar to Instagram.",
+        "Backend only allows editing the caller’s own profile."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Create a profile page that loads PublicProfile (actor.getProfile) and the user’s posts (actor.getPostsByUser), renders counts, bio, and a posts grid/list; show a default avatar using frontend/public/assets/generated/default-avatar.dim_256x256.png when no custom avatar is supported. Verify shadcn-ui usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useProfile.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for fetching a profile by principal and fetching that user’s posts, with loading/empty/error states suitable for ProfilePage; cache results to avoid unnecessary refetching."
+        },
+        {
+          "path": "frontend/src/components/EditProfileDialog.tsx",
+          "operation": "create",
+          "description": "Create an edit profile dialog for the authenticated user that edits display name and bio and calls actor.createOrUpdateProfile; on success, update/invalidate profile queries so UI updates immediately. Prefer shadcn-ui Dialog/Input/Textarea/Button. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/UserPostsGrid.tsx",
+          "operation": "create",
+          "description": "Add a reusable grid/list component for rendering a user’s posts in an Instagram-like grid, using ExternalBlob.getDirectURL for thumbnails and handling empty state. Verify the blob-storage component usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire ProfilePage into routing (e.g., /profile/:principal) and add navigation access to the current user’s profile from the authenticated layout."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add a consistent navigation entry to the current user’s profile and ensure responsive layout works on mobile and desktop widths."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Follow/unfollow between users with follow state reflected on profile and counts updated after actions.",
+      "acceptanceCriteria": [
+        "On another user’s profile, a follow/unfollow button reflects current state and toggles correctly.",
+        "Follower/following counts update after follow/unfollow.",
+        "Backend prevents following self and handles idempotent operations safely (e.g., following twice does not duplicate)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useFollow.ts",
+          "operation": "create",
+          "description": "Add React Query mutations for follow/unfollow using actor.follow and actor.unfollow, with optimistic updates to cached PublicProfile follower/following counts and UI state; handle backend idempotency/self-follow errors gracefully with English messaging. Verify the selected authorization component’s guidance for handling authorization failures before implementing."
+        },
+        {
+          "path": "frontend/src/components/FollowButton.tsx",
+          "operation": "create",
+          "description": "Create a follow/unfollow button component that derives initial follow state using available backend behavior (e.g., by interpreting follow/unfollow call results/errors if explicit state is not provided) and keeps UI consistent via React Query cache updates. Prefer shadcn-ui Button. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Integrate FollowButton on other users’ profiles (hide/disable on self), and ensure follower/following counts refresh/update after follow/unfollow."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "User discovery search to find profiles by display name and navigate to profile pages with clear states.",
+      "acceptanceCriteria": [
+        "UI provides a search input that returns a list of matching users.",
+        "Selecting a user navigates to their profile page.",
+        "Search results handle loading/empty/error states clearly."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SearchPage.tsx",
+          "operation": "create",
+          "description": "Create a search page with an input (debounced) that calls actor.searchProfiles(searchTerm) and renders a selectable results list with loading/empty/error states; selecting a result navigates to that user’s ProfilePage. Prefer shadcn-ui Input/List styles. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useProfileSearch.ts",
+          "operation": "create",
+          "description": "Add a React Query hook that executes searchProfiles with debouncing and caches results per search term; handle errors and empty results clearly in English."
+        },
+        {
+          "path": "frontend/src/components/SearchResultsList.tsx",
+          "operation": "create",
+          "description": "Create a reusable list component for rendering user search results (avatar placeholder + display name + bio snippet) and handling keyboard/mouse selection. Use default avatar asset when needed. Verify shadcn-ui usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire SearchPage into authenticated routing and navigation so users can access discovery from the app shell."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add a consistent navigation item for Search alongside Feed/Profile, maintaining responsive behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Distinct Instagram-like visual theme (no blue/purple), applied consistently with responsive navigation and layouts.",
+      "acceptanceCriteria": [
+        "Theme defines a consistent color palette, typography, spacing, and component styling across the app.",
+        "Layout is responsive and usable on narrow mobile widths and typical desktop widths.",
+        "Primary navigation (e.g., top bar or bottom nav) is consistent across main screens."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styles and Tailwind/CSS variable theme tokens for a cohesive Instagram-like look that avoids blue/purple (e.g., warm neutrals + coral/orange accents), and apply consistent typography/spacing. Ensure all user-facing text remains English."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (CSS variable-backed colors, radii, shadows) to support the new non-blue/purple brand palette and consistent component styling across cards/forms/navigation."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Apply the theme consistently to the primary navigation and responsive layout (mobile-first), ensuring consistent spacing and usable interactions on mobile and desktop. Verify shadcn-ui usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/PostCard.tsx",
+          "operation": "modify",
+          "description": "Align feed cards with the new theme (spacing, borders/shadows, typography) and ensure consistent styling across loading/empty/error states. Verify shadcn-ui usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Apply consistent themed styling to profile header, counts, and posts grid/list with responsive behavior."
+        },
+        {
+          "path": "frontend/src/pages/SearchPage.tsx",
+          "operation": "modify",
+          "description": "Apply consistent themed styling to search input and results list with responsive behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add required generated static images under frontend/public/assets/generated and use them for branding, avatars, and empty states.",
+      "acceptanceCriteria": [
+        "All required generated images exist under frontend/public/assets/generated.",
+        "App uses the logo/wordmark in the auth screen and/or top navigation.",
+        "Empty feed state uses the provided empty-state illustration when there are no posts."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/instagram-ai-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated branding asset file at this exact path and name so it can be referenced directly by the UI."
+        },
+        {
+          "path": "frontend/public/assets/generated/instagram-ai-wordmark.dim_1200x300.png",
+          "operation": "create",
+          "description": "Add the generated wordmark asset file at this exact path and name so it can be referenced directly by the UI."
+        },
+        {
+          "path": "frontend/public/assets/generated/default-avatar.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated default avatar placeholder asset file at this exact path and name so it can be referenced directly by the UI."
+        },
+        {
+          "path": "frontend/public/assets/generated/empty-feed-illustration.dim_1200x800.png",
+          "operation": "create",
+          "description": "Add the generated empty feed illustration asset file at this exact path and name so it can be referenced directly by the UI."
+        },
+        {
+          "path": "frontend/src/pages/SignInPage.tsx",
+          "operation": "modify",
+          "description": "Reference frontend/public/assets/generated/instagram-ai-wordmark.dim_1200x300.png and frontend/public/assets/generated/instagram-ai-logo.dim_512x512.png in the sign-in UI for branding (direct static asset usage)."
+        },
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Reference frontend/public/assets/generated/instagram-ai-logo.dim_512x512.png and/or frontend/public/assets/generated/instagram-ai-wordmark.dim_1200x300.png in the primary navigation for consistent branding."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Use frontend/public/assets/generated/empty-feed-illustration.dim_1200x800.png in the empty feed state when there are no posts."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Use frontend/public/assets/generated/default-avatar.dim_256x256.png as the avatar placeholder wherever a user avatar is shown and no custom avatar is supported."
+        }
+      ]
+    }
+  ]
+}

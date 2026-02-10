@@ -1,0 +1,16 @@
+{
+  "frontend/src/App.tsx": "Main app component that handles authentication state, profile setup flow, and navigation between feed, search, and profile views with a simple state-based routing system.",
+  "frontend/src/pages/SignInPage.tsx": "Sign-in page with Internet Identity authentication, displaying app branding and a welcoming interface with coral-themed styling.",
+  "frontend/src/components/AppLayout.tsx": "Authenticated app layout with top navigation bar, bottom mobile navigation, desktop side navigation, logout functionality, and new post dialog trigger.",
+  "frontend/src/components/ProfileSetupDialog.tsx": "Modal dialog for first-time profile setup that prompts users to enter their display name and optional bio after authentication.",
+  "frontend/src/components/NewPostDialog.tsx": "Dialog for creating new posts with image upload, preview, caption input, upload progress tracking, and form validation.",
+  "frontend/src/pages/FeedPage.tsx": "Main feed page displaying a scrollable list of posts in reverse-chronological order with loading, empty, and error states.",
+  "frontend/src/components/PostCard.tsx": "Reusable post card component showing author info, image, caption, like/comment counts, and interactions with timestamp formatting.",
+  "frontend/src/components/PostCommentsDialog.tsx": "Modal dialog for viewing and adding comments on posts with scrollable comment list and real-time updates.",
+  "frontend/src/pages/ProfilePage.tsx": "User profile page displaying profile info, stats (posts/followers/following), posts grid, and edit profile functionality for own profile.",
+  "frontend/src/components/EditProfileDialog.tsx": "Dialog for editing user profile information including display name and bio with form validation.",
+  "frontend/src/pages/SearchPage.tsx": "Search page with debounced user search functionality displaying matching profiles with avatar, name, bio, and stats.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including profiles, posts, likes, comments, follows, and search with proper caching and invalidation.",
+  "frontend/src/index.css": "Global styles with warm coral/orange OKLCH color theme, custom utility classes, and consistent design tokens for light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended coral/peach color palette, custom shadows, Inter font family, and design system tokens."
+}

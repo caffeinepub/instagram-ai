@@ -1,0 +1,208 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-sign-in-and-an-auth-gated-app-shell-for-instagram-ai-so-users-must-sign-in-to-view-the-feed-and-interact-create-posts-like-comment-follow",
+      "featureTitle": "Implement Internet Identity sign-in and an auth-gated app shell for \"instagram ai\" so users must sign in to view the feed and interact (create posts, like, comment, follow).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/ProfileSetupDialog.tsx",
+        "frontend/src/main.tsx",
+        "frontend/src/pages/SignInPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-main-feed-ui-that-shows-a-scrollable-list-of-posts-image-author-caption-timestamp-like-button-count-comment-preview-and-loads-data-using-react-query-with-sensible-loading-empty-error-states",
+      "featureTitle": "Build a main feed UI that shows a scrollable list of posts (image, author, caption, timestamp, like button/count, comment preview), and loads data using React Query with sensible loading/empty/error states.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-creating-a-new-post-from-the-frontend-image-selection-upload-caption-input-client-side-validation-and-submission-to-the-backend-after-posting-the-feed-updates-to-include-the-new-post",
+      "featureTitle": "Implement creating a new post from the frontend: image selection/upload, caption input, client-side validation, and submission to the backend; after posting, the feed updates to include the new post.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/NewPostDialog.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-post-interactions-like-unlike-and-comments-view-comments-add-comment-with-immediate-ui-feedback-and-backend-persistence",
+      "featureTitle": "Add post interactions: like/unlike and comments (view comments, add comment) with immediate UI feedback and backend persistence.",
+      "files": [
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/components/PostCommentsDialog.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-user-profiles-profile-page-with-display-name-bio-avatar-optional-counts-posts-followers-following-user-s-post-grid-list-and-ability-to-edit-own-profile",
+      "featureTitle": "Implement user profiles: profile page with display name, bio, avatar (optional), counts (posts/followers/following), user’s post grid/list, and ability to edit own profile.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/EditProfileDialog.tsx",
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-follow-unfollow-between-users-and-reflect-follow-state-across-the-ui-profile-pages-and-feed-where-relevant",
+      "featureTitle": "Implement follow/unfollow between users and reflect follow state across the UI (profile pages and feed where relevant).",
+      "files": [
+        "frontend/src/pages/ProfilePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-basic-user-discovery-search-to-find-profiles-by-display-name-and-or-username-if-included-and-navigate-to-their-profile-pages",
+      "featureTitle": "Add basic user discovery (search) to find profiles by display name (and/or username if included) and navigate to their profile pages.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/pages/SearchPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-set-a-coherent-distinctive-visual-theme-for-an-instagram-like-app-not-using-blue-purple-and-apply-it-consistently-across-navigation-feed-cards-forms-and-profile-pages-include-a-simple-responsive-layout-suitable-for-mobile-and-desktop",
+      "featureTitle": "Set a coherent, distinctive visual theme for an Instagram-like app (not using blue/purple) and apply it consistently across navigation, feed cards, forms, and profile pages; include a simple responsive layout suitable for mobile and desktop.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/SearchPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-static-image-assets-to-the-frontend-and-use-them-in-the-ui-where-appropriate-app-branding-and-empty-states-store-them-under-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend",
+      "featureTitle": "Add generated static image assets to the frontend and use them in the UI where appropriate (app branding and empty states). Store them under frontend/public/assets/generated and reference them directly from the frontend.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/pages/FeedPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/SignInPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

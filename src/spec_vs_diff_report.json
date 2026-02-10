@@ -1,0 +1,80 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T04:20:19.268Z",
+  "summary": "Diff adds an authenticated Instagram-like frontend (feed, profiles, search, new post, likes/comments UI) and a Motoko backend actor with profile/post types plus authorization/blob-storage mixins. Several acceptance-criteria items are not evidenced or appear incomplete: search error states, new-post upload failure UI, follow/unfollow toggle state, and required generated image assets presence. Diff also introduces an unrequested admin-token-based access-control initialization path.",
+  "missing_requirements": [
+    {
+      "id": "REQ-4",
+      "requirement": "If upload fails, the user sees a clear error message and can retry.",
+      "reason": "New post submission catches errors but only logs to console; no user-visible error state or retry affordance is shown in the dialog.",
+      "evidence": [
+        "frontend/src/components/NewPostDialog.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Follow/unfollow between users with UI reflecting current follow state and toggling correctly (including unfollow and idempotency expectations).",
+      "reason": "Profile UI snippet for non-own profiles shows only a \"Follow\" button wired to follow action; no evidence of rendering an \"Unfollow\" state/button based on current follow relationship.",
+      "evidence": [
+        "frontend/src/pages/ProfilePage.tsx"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Search results handle loading/empty/error states clearly.",
+      "reason": "Search page shows loading and empty states, but there is no error state rendering evidenced for failed searches.",
+      "evidence": [
+        "frontend/src/pages/SearchPage.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "All required generated images exist under frontend/public/assets/generated.",
+      "reason": "UI references the required assets by path, but the diff summary does not show the image files being added under frontend/public/assets/generated (some files were omitted due to limits, so existence cannot be verified from provided evidence).",
+      "evidence": [
+        "frontend/src/pages/SignInPage.tsx",
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/PostCard.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin-token URL parameter (caffeineAdminToken) used to initialize backend access control via a secret initialization call.",
+      "reason": "BuildRequest does not ask for any admin token mechanism or secret-based access-control initialization; it only specifies Internet Identity auth and a single Motoko actor backend.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/utils/urlParams.ts"
+      ]
+    }
+  ],
+  "confidence": 0.68,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AppLayout.tsx",
+    "frontend/src/components/EditProfileDialog.tsx",
+    "frontend/src/components/NewPostDialog.tsx",
+    "frontend/src/components/PostCard.tsx",
+    "frontend/src/components/PostCommentsDialog.tsx",
+    "frontend/src/components/ProfileSetupDialog.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/FeedPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/pages/SearchPage.tsx",
+    "frontend/src/pages/SignInPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build an Instagram-like social media app named \"instagram ai\".",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App logo icon, modern gradient camera mark (instagram-ai-logo.dim_512x512.png)\n- App wordmark text logo reading \"instagram ai\" (instagram-ai-wordmark.dim_1200x300.png)\n- Default user avatar placeholder, neutral minimal style (default-avatar.dim_256x256.png)\n- Empty feed illustration, minimal social/photo motif (empty-feed-illustration.dim_1200x800.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-sign-in-and-an-auth-gated-app-shell-for-instagram-ai-so-users-must-sign-in-to-view-the-feed-and-interact-create-posts-like-comment-follow",
+      "title": "Implement Internet Identity sign-in and an auth-gated app shell for \"instagram ai\" so users must sign in to view the feed and interact (create posts, like, comment, follow).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-main-feed-ui-that-shows-a-scrollable-list-of-posts-image-author-caption-timestamp-like-button-count-comment-preview-and-loads-data-using-react-query-with-sensible-loading-empty-error-states",
+      "title": "Build a main feed UI that shows a scrollable list of posts (image, author, caption, timestamp, like button/count, comment preview), and loads data using React Query with sensible loading/empty/error states.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-creating-a-new-post-from-the-frontend-image-selection-upload-caption-input-client-side-validation-and-submission-to-the-backend-after-posting-the-feed-updates-to-include-the-new-post",
+      "title": "Implement creating a new post from the frontend: image selection/upload, caption input, client-side validation, and submission to the backend; after posting, the feed updates to include the new post.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-post-interactions-like-unlike-and-comments-view-comments-add-comment-with-immediate-ui-feedback-and-backend-persistence",
+      "title": "Add post interactions: like/unlike and comments (view comments, add comment) with immediate UI feedback and backend persistence.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-user-profiles-profile-page-with-display-name-bio-avatar-optional-counts-posts-followers-following-user-s-post-grid-list-and-ability-to-edit-own-profile",
+      "title": "Implement user profiles: profile page with display name, bio, avatar (optional), counts (posts/followers/following), user’s post grid/list, and ability to edit own profile.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-follow-unfollow-between-users-and-reflect-follow-state-across-the-ui-profile-pages-and-feed-where-relevant",
+      "title": "Implement follow/unfollow between users and reflect follow state across the UI (profile pages and feed where relevant).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-user-discovery-search-to-find-profiles-by-display-name-and-or-username-if-included-and-navigate-to-their-profile-pages",
+      "title": "Add basic user discovery (search) to find profiles by display name (and/or username if included) and navigate to their profile pages.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-set-a-coherent-distinctive-visual-theme-for-an-instagram-like-app-not-using-blue-purple-and-apply-it-consistently-across-navigation-feed-cards-forms-and-profile-pages-include-a-simple-responsive-layout-suitable-for-mobile-and-desktop",
+      "title": "Set a coherent, distinctive visual theme for an Instagram-like app (not using blue/purple) and apply it consistently across navigation, feed cards, forms, and profile pages; include a simple responsive layout suitable for mobile and desktop.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-image-assets-to-the-frontend-and-use-them-in-the-ui-where-appropriate-app-branding-and-empty-states-store-them-under-frontend-public-assets-generated-and-reference-them-directly-from-the-frontend",
+      "title": "Add generated static image assets to the frontend and use them in the UI where appropriate (app branding and empty states). Store them under frontend/public/assets/generated and reference them directly from the frontend.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create an Instagram-like app (\"instagram ai\") with core Instagram-style social features.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Create backend data models and persistence for core Instagram-style entities: users/profiles, posts (caption + image), follows, likes, and comments, all scoped to the caller principal.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "instagram ai",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
